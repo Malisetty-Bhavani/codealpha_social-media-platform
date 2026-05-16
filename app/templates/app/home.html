@@ -1,0 +1,181 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+
+<div class="hero-section">
+
+    <h1>Welcome to ShareNext</h1>
+
+    <p>
+        Connect with people around the world.
+    </p>
+
+</div>
+
+<!-- SEARCH USERS -->
+
+<div class="post-card">
+
+    <form method="GET">
+
+        <input
+            type="text"
+            name="q"
+            placeholder="Search users..."
+        >
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <br>
+
+    {% for user in users %}
+
+        <p>
+
+            <a href="{% url 'profile' user.username %}">
+
+                @{{ user.username }}
+
+            </a>
+
+        </p>
+
+    {% empty %}
+
+        <p>No users found.</p>
+
+    {% endfor %}
+
+</div>
+
+<!-- POSTS -->
+
+{% for post in posts %}
+
+<div class="post-card">
+
+    <!-- USERNAME -->
+
+    <h3>
+
+        <a href="{% url 'profile' post.user.username %}">
+
+            @{{ post.user.username }}
+
+        </a>
+
+    </h3>
+
+    <!-- CONTENT -->
+
+    <p class="post-content">
+
+        {{ post.content }}
+
+    </p>
+
+    <!-- IMAGE -->
+
+    {% if post.image %}
+
+        <img
+            src="{{ post.image.url }}"
+            class="post-image"
+        >
+
+    {% endif %}
+
+    <br><br>
+
+    <!-- ACTIONS -->
+
+    <div class="post-actions">
+
+        <!-- LIKE -->
+
+        <a href="{% url 'like_post' post.id %}">
+
+            ❤️ Like ({{ post.likes.count }})
+
+        </a>
+
+        &nbsp;&nbsp;
+
+        <!-- COMMENT -->
+
+        <a href="#comment{{ post.id }}">
+
+            💬 Comment
+
+        </a>
+
+    </div>
+
+    <hr>
+
+    <!-- COMMENTS -->
+
+    <div class="comments-section">
+
+        {% for comment in post.comment_set.all %}
+
+            <p>
+
+                <b>
+
+                    <a href="{% url 'profile' comment.user.username %}">
+
+                        @{{ comment.user.username }}
+
+                    </a>
+
+                </b>
+
+                {{ comment.text }}
+
+            </p>
+
+        {% empty %}
+
+            <p>No comments yet.</p>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- ADD COMMENT -->
+
+    <form
+        method="POST"
+        action="{% url 'add_comment' post.id %}"
+        id="comment{{ post.id }}"
+    >
+
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="comment"
+            placeholder="Write a comment..."
+            required
+        >
+
+        <button type="submit">
+
+            Post Comment
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}
