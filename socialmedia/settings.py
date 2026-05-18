@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-mo$$t@^#wqnpeqz!enycpub#s51_5s@agkg5jdna5*ubd(3#l_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['codealpha-social-media-platform-1b51.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
